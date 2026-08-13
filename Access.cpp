@@ -16,7 +16,7 @@ class Demo
             i = 10;
             j = 20;
             k = 30;
-            a = 40;
+            a = 50;// before value was 40 chnaged from local
         }
         void Display()
         {
