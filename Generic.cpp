@@ -5,7 +5,7 @@ template <class T>
 T Addition(T no1, T no2)
 {
     T ans;
-    ans = no1 + no2;
+    ans = no1 + no2;// Change to learn merge
     return ans;
 }
 
