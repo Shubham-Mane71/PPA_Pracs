@@ -1,12 +1,41 @@
 name: My First Action
 
 on:
-  push: 
+  push:
 
 jobs:
-  hello:
-    runs-on: windows-latest
+  lint-test-build:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: print message
-        run: echo "Shri Ganesha"
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Cache Maven Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Lint (Checkstyle)
+        run: mvn checkstyle:check
+
+      - name: Run Unit Tests
+        run: mvn test
+
+      - name: Build Application
+        run: mvn clean package
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-build
+          path: target/*.jar
